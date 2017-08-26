@@ -1,0 +1,71 @@
+create database bookstore;
+
+创建category表
+	create table category(
+		id varchar(50) primary key,
+		name varchar(120) not null unique,
+		description varchar(120)
+	)character set utf8 collate utf8_general_ci;
+	
+创建book表
+	create table book(
+		id varchar(50) primary key,
+		name varchar(120) not null,
+		author varchar(40),
+		price double not null,
+		image varchar(225) not null,
+		description varchar(120),
+		category_id varchar(40),
+		constraint category_idFK foreign key(category_id) references category(id)
+	)character set utf8 collate utf8_general_ci;
+	
+	
+创建User表	
+	create table user(
+		id varchar(50) primary key,
+		username varchar(120) not null unique,
+		password varchar(60) not null unique,
+		phone varchar(40) not null,
+		address varchar(225) not null,
+		email varchar(120) not null
+	)character set utf8 collate utf8_general_ci;
+	
+Order表  ----   OrderItem表   ------- Book表
+   1     ：                 多
+   				   1                   ：              1
+
+创建Order表
+	create table orders(
+		id varchar(50) primary key,
+		ordertime datetime not null,
+		totalprice double not null,
+		user_id varchar(50),
+		constraint user_id_FK foreign key(user_id) references user(id)
+	)character set utf8 collate utf8_general_ci;
+	
+创建OrderItem表
+	create table orderItem(
+		id varchar(40) primary key,
+		num int not null,
+		sum double not null,
+		orders_id varchar(40),
+		book_id varchar(40),
+		constraint orders_id_FK foreign key(orders_id) references orders(id),
+		constraint book_id_FK foreign key(book_id) references book(id)
+	)character set utf8 collate utf8_general_ci;
+	
+创建权限表：权限拦截，dao层未设计，直接向数据库中添加数据
+	create table privilege(
+		id varchar(40) primary key,
+		name varchar(60) not null
+	)character set utf8 collate utf8_general_ci;
+	
+	
+	create table user_privilege(
+		user_id varchar(50),
+		privilege_id varchar(40),
+		primary key(user_id,privilege_id),
+		constraint user_id_FK2 foreign key(user_id) references user(id),
+		constraint privilege_id_FK2 foreign key(privilege_id) references privilege(id)
+	)character set utf8 collate utf8_general_ci;
+	
